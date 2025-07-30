@@ -8,14 +8,13 @@ const AddRecipeForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (!title.trim() || !description.trim()) return;
     addRecipe({ id: Date.now(), title, description });
     setTitle('');
     setDescription('');
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
+    <form onSubmit={handleSubmit}>
       <input
         type="text"
         value={title}
@@ -23,14 +22,12 @@ const AddRecipeForm = () => {
         placeholder="Title"
         required
       />
-      <br />
       <textarea
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         placeholder="Description"
         required
       />
-      <br />
       <button type="submit">Add Recipe</button>
     </form>
   );
