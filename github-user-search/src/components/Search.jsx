@@ -20,7 +20,7 @@ export default function Search() {
       setUser(data);
     } catch (err) {
       console.error(err);
-      setError('Looks like we can’t find the user');
+      setError('Looks like we cant find the user');
     } finally {
       setLoading(false);
     }
