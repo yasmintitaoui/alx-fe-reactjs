@@ -3,7 +3,7 @@ import axios from 'axios';
 const BASE_URL = 'https://api.github.com';
 
 export async function fetchUsersByAdvancedSearch(username, location, minRepos) {
-  // Build the search query string
+  // Build the search query string with filters
   let query = `${username} in:login`;
 
   if (location) {
@@ -16,10 +16,10 @@ export async function fetchUsersByAdvancedSearch(username, location, minRepos) {
 
   const url = `${BASE_URL}/search/users?q=${encodeURIComponent(query)}&per_page=10`;
 
-  // Fetch list of users matching criteria
+  // Search users matching criteria
   const response = await axios.get(url);
 
-  // For each user, fetch detailed info (for location, repo count)
+  // Fetch detailed info for each user to get location, repo count, etc.
   const detailedUsers = await Promise.all(
     response.data.items.map(async (user) => {
       const userDetails = await axios.get(`${BASE_URL}/users/${user.login}`);

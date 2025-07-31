@@ -16,75 +16,80 @@ export default function Search() {
     setUsers([]);
 
     try {
-      const data = await fetchUsersByAdvancedSearch(username, location, minRepos);
-      if (data.items.length === 0) {
-        setError('Looks like we cant find the user');
-      } else {
-        setUsers(data.items);
+      const { items } = await fetchUsersByAdvancedSearch(username, location, minRepos);
+      setUsers(items);
+      if (items.length === 0) {
+        setError("Looks like we can't find the user");
       }
     } catch (err) {
-      console.error(err);
-      setError('Looks like we cant find the user');
+      setError("Looks like we can't find the user");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto p-4">
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="p-4">
+      <form onSubmit={handleSubmit} className="space-y-3 max-w-md mx-auto">
         <input
           type="text"
-          placeholder="GitHub username"
+          placeholder="Username"
           value={username}
-          onChange={e => setUsername(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)}
           required
-          className="w-full px-3 py-2 border rounded"
+          className="border p-2 w-full rounded"
         />
-
         <input
           type="text"
           placeholder="Location (optional)"
           value={location}
-          onChange={e => setLocation(e.target.value)}
-          className="w-full px-3 py-2 border rounded"
+          onChange={(e) => setLocation(e.target.value)}
+          className="border p-2 w-full rounded"
         />
-
         <input
           type="number"
-          placeholder="Minimum repositories (optional)"
+          placeholder="Minimum Repositories (optional)"
           value={minRepos}
-          onChange={e => setMinRepos(e.target.value)}
-          min="0"
-          className="w-full px-3 py-2 border rounded"
+          onChange={(e) => setMinRepos(e.target.value)}
+          className="border p-2 w-full rounded"
+          min={0}
         />
-
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+          className="bg-blue-600 text-white py-2 px-4 rounded w-full hover:bg-blue-700 transition"
         >
           Search
         </button>
       </form>
 
-      {loading && <p className="mt-4 text-center">Loading...</p>}
-      {error && <p className="mt-4 text-center text-red-600">{error}</p>}
+      {loading && <p className="text-center mt-4">Loading...</p>}
 
-      <div className="mt-6 space-y-4">
-        {users.map(user => (
-          <div key={user.id} className="border p-4 rounded flex items-center space-x-4">
-            <img src={user.avatar_url} alt={user.login} className="w-16 h-16 rounded-full" />
-            <div>
-              <h3 className="font-semibold text-lg">{user.login}</h3>
-              {user.location && <p>Location: {user.location}</p>}
-              <p>Repos: {user.public_repos}</p>
-              <a href={user.html_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+      {error && <p className="text-center mt-4 text-red-600">{error}</p>}
+
+      {users.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 max-w-4xl mx-auto">
+          {users.map((user) => (
+            <div key={user.id} className="border rounded p-4 text-center shadow">
+              <img
+                src={user.avatar_url}
+                alt={user.login}
+                className="w-24 h-24 rounded-full mx-auto"
+              />
+              <h3 className="mt-2 font-semibold">{user.name || user.login}</h3>
+              <p className="text-gray-600">{user.location || 'Location unknown'}</p>
+              <p className="text-gray-600">Repos: {user.public_repos}</p>
+              <a
+                href={user.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline mt-2 inline-block"
+              >
                 View Profile
               </a>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
