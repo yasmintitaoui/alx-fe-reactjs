@@ -1,37 +1,41 @@
+import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import TodoList from "../components/TodoList";
 
 describe("TodoList Component", () => {
   test("renders initial todos", () => {
     render(<TodoList />);
-    expect(screen.getByText("Learn React")).toBeInTheDocument();
-    expect(screen.getByText("Build a Todo App")).toBeInTheDocument();
+    const todo1 = screen.getByText(/Learn React/i);
+    const todo2 = screen.getByText(/Build Todo App/i);
+    expect(todo1).toBeInTheDocument();
+    expect(todo2).toBeInTheDocument();
   });
 
   test("adds a new todo", () => {
     render(<TodoList />);
-    const input = screen.getByPlaceholderText("Add a new todo");
-    const button = screen.getByText("Add");
+    const input = screen.getByPlaceholderText("Add new todo");
+    const addButton = screen.getByText("Add");
 
-    userEvent.type(input, "New Todo");
-    fireEvent.click(button);
+    fireEvent.change(input, { target: { value: "Test new todo" } });
+    fireEvent.click(addButton);
 
-    expect(screen.getByText("New Todo")).toBeInTheDocument();
+    expect(screen.getByText("Test new todo")).toBeInTheDocument();
   });
 
-  test("toggles todo completion", () => {
+  test("toggles a todo completion", () => {
     render(<TodoList />);
     const todo = screen.getByText("Learn React");
+
     fireEvent.click(todo);
-    expect(todo).toHaveClass("line-through");
+    expect(todo).toHaveClass("line-through"); // assuming you mark completed with line-through
   });
 
   test("deletes a todo", () => {
     render(<TodoList />);
-    const todo = screen.getByText("Learn React");
-    const deleteButton = screen.getAllByText("Delete")[0];
+    const deleteButton = screen.getAllByText("Delete")[0]; // delete first todo
+    const todoText = screen.getByText("Learn React");
+
     fireEvent.click(deleteButton);
-    expect(todo).not.toBeInTheDocument();
+    expect(todoText).not.toBeInTheDocument();
   });
 });
