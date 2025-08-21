@@ -1,30 +1,24 @@
-import { Outlet, Link } from "react-router-dom";
+import React from 'react';
+import { Routes, Route, Link } from 'react-router-dom';
+import ProfileDetails from './ProfileDetails';
+import ProfileSettings from './ProfileSettings';
 
-export default function Profile() {
+function Profile() {
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">User Profile</h1>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Profile Page</h1>
 
-      {/* Navigation for nested routes */}
-      <nav className="flex space-x-4 mb-6">
-        <Link
-          to="details"
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-        >
-          Details
-        </Link>
-        <Link
-          to="settings"
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
-        >
-          Settings
-        </Link>
+      <nav className="mb-4 space-x-4">
+        <Link to="details" className="text-blue-500 hover:underline">Details</Link>
+        <Link to="settings" className="text-blue-500 hover:underline">Settings</Link>
       </nav>
 
-      {/* Nested routes render here */}
-      <div className="border p-4 rounded shadow">
-        <Outlet />
-      </div>
+      <Routes>
+        <Route path="details" element={<ProfileDetails />} />
+        <Route path="settings" element={<ProfileSettings />} />
+      </Routes>
     </div>
   );
 }
+
+export default Profile;
