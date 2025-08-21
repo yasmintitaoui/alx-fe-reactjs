@@ -3,32 +3,30 @@ import { useState } from "react";
 function AddRecipeForm() {
   const [title, setTitle] = useState("");
   const [ingredients, setIngredients] = useState("");
-  const [instructions, setInstructions] = useState("");
+  const [steps, setSteps] = useState(""); // renamed
   const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // Simple validation
-    if (!title || !ingredients || !instructions) {
+    if (!title || !ingredients || !steps) {
       setError("Please fill out all fields.");
       return;
     }
 
-    // Example of posting data or adding to local state
     const newRecipe = {
       id: Date.now(),
       title,
-      ingredients: ingredients.split("\n"), // array
-      instructions: instructions.split("\n"), // array
+      ingredients: ingredients.split("\n"),
+      steps: steps.split("\n"), // renamed
     };
 
     console.log("New Recipe Submitted:", newRecipe);
 
-    // Reset form
     setTitle("");
     setIngredients("");
-    setInstructions("");
+    setSteps("");
     setError("");
   };
 
@@ -59,10 +57,10 @@ function AddRecipeForm() {
           />
         </div>
         <div>
-          <label className="block mb-1 font-semibold">Preparation Steps</label>
+          <label className="block mb-1 font-semibold">Steps</label>
           <textarea
-            value={instructions}
-            onChange={(e) => setInstructions(e.target.value)}
+            value={steps}
+            onChange={(e) => setSteps(e.target.value)}
             rows="4"
             placeholder="One step per line"
             className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
